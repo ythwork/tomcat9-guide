@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tomcat-users xmlns="http://tomcat.apache.org/xml"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
+              version="1.0">
+<!-- admin 계정 for Manager 접속 -->
+<!-- bin/digest.sh로 평문을 암호화 한 후 password에 복사한다. -->
+<!-- <CredentialHandler>는 Realm 태그 사이에 위치한다. 
+<Realm className="org.apache.catalina.realm.UserDatabaseRealm" resourceName="UserDatabase">
+	<CredentialHandler className="org.apache.catalina.realm.MessageDigestCredentialHandler" algorithm="sha-512" />
+</Realm>
+-->
+<role rolename="manager-gui"/>
+<user username="admin" password="c28d300f13aa569ea3660dd0dab66723353d78dfe352faf9323567af614040aa$1$6c217e7130209b80b998be83546dbfc88214db2db7bba3194d23ef65f2ccf028efc47ed9ef2828297838367e3d5391c89d08c39886739a833d8306954dccc84c" roles="manager-gui"/>
+</tomcat-users>

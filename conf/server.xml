@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+ 	서버는 셧다운 아이피, 포트와 셧다운 커맨드를 가진다. 
+ 	포트 속성이 -1이면 셧다운 포트 기능을 사용하지 않는다.
+	보안상 셧다운 커맨드는 변경하는 것이 좋다.
+-->
+<Server port="${tomcat.port.shutdown}" shutdown="SHUTDOWN">
+  <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+  <!-- root로 tomcat을  구동하는것을 막는다. -->
+  <Listener className="org.apache.catalina.security.SecurityListener" checkedOsUsers="root" />
+
+  <!--APR library loader. Documentation at /docs/apr.html -->
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+  <!-- Prevent memory leaks due to use of particular java/javax APIs-->
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+   <Resource name="UserDatabase" auth="Container"
+              type="org.apache.catalina.UserDatabase"
+              description="User database that can be updated and saved"
+              factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+              pathname="conf/tomcat-users.xml" />
+
+<!--
+	서비스는 커넥터의 모음이다.   
+-->
+  <Service name="Catalina">
+   <Connector port="${tomcat.port.http}" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="${tomcat.port.https}" />
+    <Engine name="Catalina" defaultHost="localhost">
+
+     	<Realm className="org.apache.catalina.realm.LockOutRealm" >
+			<!-- admin 계정 password를 암호화하기 위해 등록한다.  -->
+        	<Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+            	resourceName="UserDatabase">
+			   	<CredentialHandler className="org.apache.catalina.realm.MessageDigestCredentialHandler" algorithm="sha-512" />
+			</Realm>
+		</Realm>
+
+      <!--
+	  	name에서 할당된 URL이 있다면 URL로 설정
+		appBase는 호스트의 애플리케이션 디렉터리 
+		xmlBase는 애플리케이션 Context XML 파일인데 디폴트 설정으로 $CATALINA_BASE/conf/<Engine>/<Host>에 위치
+		
+		autoDeploy는 appBase나 xmlBase에 변경 사항을 주기적으로 확인한다. 
+			production 레벨에서는 false로 설정하는 것이 좋다.
+		
+		unpackWARs는 WAR 파일을 풀어서 사용할지 여부
+		
+		workDir은 Scratch 디렉터리를 설정 jsp 컴파일 후 생긴 .java, .class 파일과 세션 파일 SESSION.ser를 저장한다.
+		기본 위치는 $CATALINA_BASE/work/<Engine>/<Host> 
+	  -->
+	  
+	  <Host name="localhost" appBase="webapps"
+            unpackWARs="true" autoDeploy="false">
+
+		<!--
+			Context는 호스트 내에 배포된 애플리케이션이다.
+			애플리케이션의 META-INF/context.xml
+			$CATALINA_BASE/conf/<Engine>/<Host> 에 <app = context path>.xml
+			Host 내에도 Context를 설정할 수 있지만 권장하지 않는다.
+
+			$CATALINA_BASE/conf/context.xml은 전역 컨텍스트 파일로 톰캣 내 모든 앱에 적용
+			$CATALINA_BASE/conf/<Engine>/<Host>/context.xml.default는 호스트의 전역 컨텍스트 파일
+
+			reloadable은 WEB-INF/classes, WEB-INFO/lib에 변경이 생겼을 때 자동으로 업데이트 여부를 결정한다.
+			기본은 false이다 개발시에는 좋지만 production으로 가면 부하가 상당하다.
+		-->
+		
+        <!-- Access log processes all example.
+             Documentation at: /docs/config/valve.html
+             Note: The pattern used is equivalent to using pattern="common" -->
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+               prefix="localhost_access_log" suffix=".txt"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+
+	<!--
+		RemoteAddrValve는 Engine, Host, Context 단위로 설정 가능, allow, deny로 결정
+		denyStatus로 기본 응답 코드 설정
+	-->
+		<Valve className="org.apache.catalina.valves.RemoteAddrValve"
+			deny="172\.30\.1\.\d+" denyStatus="500" />
+      </Host>
+    </Engine>
+  </Service>
+</Server>
