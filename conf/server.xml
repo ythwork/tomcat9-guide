@@ -77,12 +77,30 @@
 			기본은 false이다 개발시에는 좋지만 production으로 가면 부하가 상당하다.
 		-->
 		
-        <!-- Access log processes all example.
-             Documentation at: /docs/config/valve.html
-             Note: The pattern used is equivalent to using pattern="common" -->
-        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+       	<!-- 
+			pattern 
+			%h = remote host name 
+			%l = current request thread name
+			%u = remote user authenticated or '-'
+			%t = date and time
+			%r = request method, request URI
+			%s = response status code
+			%b = bytes sent 
+			%D = 요청 처리 시간을 ms로 기록 
+			%T = 요청 처리 시간을 sec로 기록 
+		-->	 	
+		<!--
+		<Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
                prefix="localhost_access_log" suffix=".txt"
-               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+               pattern="%h %l %u %t &quot;%r&quot; %s %b %D" />
+		-->
+
+		<!-- 확장형 액세스 로그 밸브  -->
+		<Valve className="org.apache.catalina.valves.ExtendedAccessLogValve" directory="logs"
+				fileDateFormat="yyyy-MM-dd.HH"
+				prefix="localhost_extended_access_log."
+				suffix=".txt"
+				pattern="c-ip date time cs-method cs-uri-stem cs-uri cs-uri-query sc-status x-threadname bytes time-taken" />
 
 	<!--
 		RemoteAddrValve는 Engine, Host, Context 단위로 설정 가능, allow, deny로 결정
