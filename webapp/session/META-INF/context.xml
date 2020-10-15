@@ -1,0 +1,10 @@
+<!-- 
+     디렉터리에 세션ID.session 이름으로 저장된다.
+-->
+
+<Context>
+	<Manager className="org.apache.catalina.session.PersistentManager">
+		<Store className="org.apache.catalina.session.FileStore"
+			directory="<세션 파일이 저장될 디렉터리>"/>
+	</Manager>
+</Context>
