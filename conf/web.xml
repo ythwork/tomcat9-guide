@@ -33,7 +33,26 @@
         <load-on-startup>3</load-on-startup>
     </servlet>
 
-    <welcome-file-list>
+   	<!--
+		톰캣은 유저가 사이트에 머무는 동안 세션 객체를 저장
+		일정 시간 동안 아무런 액션을 취하지 않으면 세션을 제거
+		timeout = 마지막 액세스 타임을 기준으로 세션 제거 시기를 결정
+	-->
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+
+	<!-- 클라이언트 request를 로그로 남긴다. logging.properties에서 FileHandler를 이용해 파일로 남긴다.  -->
+	<filter>
+		<filter-name>requestdumper</filter-name>
+		<filter-class>org.apache.catalina.filters.RequestDumperFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>requestdumper</filter-name>
+		<url-pattern>*</url-pattern>
+	</filter-mapping>
+
+	<welcome-file-list>
         <welcome-file>index.html</welcome-file>
         <welcome-file>index.htm</welcome-file>
         <welcome-file>index.jsp</welcome-file>
@@ -47,15 +66,5 @@
 			<http-method>OPTIONS</http-method>
 		</web-resource-collection>
 	</security-constraint>
-
-	<!-- 클라이언트 request를 로그로 남긴다. logging.properties에서 FileHandler를 이용해 파일로 남긴다.  -->
-	<filter>
-		<filter-name>requestdumper</filter-name>
-		<filter-class>org.apache.catalina.filters.RequestDumperFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>requestdumper</filter-name>
-		<url-pattern>*</url-pattern>
-	</filter-mapping>
 
 </web-app>
