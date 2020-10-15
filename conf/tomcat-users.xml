@@ -11,5 +11,5 @@
 </Realm>
 -->
 <role rolename="manager-gui"/>
-<user username="admin" password="c28d300f13aa569ea3660dd0dab66723353d78dfe352faf9323567af614040aa$1$6c217e7130209b80b998be83546dbfc88214db2db7bba3194d23ef65f2ccf028efc47ed9ef2828297838367e3d5391c89d08c39886739a833d8306954dccc84c" roles="manager-gui"/>
+<user username="admin" password="<digest.sh로 얻은 암호화된 비밀번호>" roles="manager-gui"/>
 </tomcat-users>

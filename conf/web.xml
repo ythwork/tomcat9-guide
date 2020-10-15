@@ -38,7 +38,8 @@
         <welcome-file>index.htm</welcome-file>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
-
+	
+	<!-- OPTIONS 메서드는 가급적 공개하지 않는 것이 낫다. -->
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Restricted Methods</web-resource-name>
@@ -46,7 +47,8 @@
 			<http-method>OPTIONS</http-method>
 		</web-resource-collection>
 	</security-constraint>
-	
+
+	<!-- 클라이언트 request를 로그로 남긴다. logging.properties에서 FileHandler를 이용해 파일로 남긴다.  -->
 	<filter>
 		<filter-name>requestdumper</filter-name>
 		<filter-class>org.apache.catalina.filters.RequestDumperFilter</filter-class>

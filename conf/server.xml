@@ -5,7 +5,15 @@
 	보안상 셧다운 커맨드는 변경하는 것이 좋다.
 -->
 <Server port="${tomcat.port.shutdown}" shutdown="SHUTDOWN">
-  <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+
+  <!--
+	톰캣을 켤 때 여러 정보를 출력한다.
+	logArs : 명령행 아규먼트 디폴트는 true
+	logEnv : 환경 변수 디폴트는 false
+	logProps : 시스템 프로퍼티 디폴트는 false 
+  -->
+
+  <Listener className="org.apache.catalina.startup.VersionLoggerListener" logArgs="true" logEnv="true" logProps="true" />
   <!-- root로 tomcat을  구동하는것을 막는다. -->
   <Listener className="org.apache.catalina.security.SecurityListener" checkedOsUsers="root" />
 
