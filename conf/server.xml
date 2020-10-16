@@ -109,6 +109,8 @@
 		<Valve className="org.apache.catalina.valves.RemoteAddrValve"
 			deny="172\.30\.1\.\d+" denyStatus="500" />
       </Host>
+	  <!-- 오랫동안 실행 중인 스레드를 모니터링  -->
+	  <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve" threshold="120"/>
     </Engine>
   </Service>
 </Server>
